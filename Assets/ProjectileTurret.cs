@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileTurret : MonoBehaviour
-{
+public class ProjectileTurret : MonoBehaviour{
     [SerializeField] float projectileSpeed = 1;
     [SerializeField] Vector3 gravity = new Vector3(0, -9.8f, 0);
     [SerializeField] LayerMask targetLayer;
@@ -91,6 +90,8 @@ public class ProjectileTurret : MonoBehaviour
             float highAngle = v2 + root;
             float lowAngle = v2 - root;
 
+            DrawLine(); //S.S
+
             if (useLow)
                 return (Mathf.Atan2(lowAngle, g * x) * Mathf.Rad2Deg);
             else
@@ -99,4 +100,32 @@ public class ProjectileTurret : MonoBehaviour
         else
             return null;
     }
+
+        private void DrawLine(){
+        Vector3 iPos = barrelEnd.position;
+        Vector3 tarPos = crosshair.transform.position;
+        float midPoint;
+
+        //Get the mid point // When speed is 0, the is at the highest point
+        //midPoint = (float)((iPos.y * projectileSpeed/2) + (.5 * (0 + gravity.y) * (projectileSpeed/2 * projectileSpeed/2)));
+        midPoint = (((0 + gravity.y) + 0)/2) * 2;
+
+        float x = (iPos.x + tarPos.x) /2;
+        float y = midPoint;
+        float z = (iPos.z + tarPos.z) / 2;
+        Vector3 midPosition= new Vector3(x, y, z);
+
+        line.SetPosition(0, iPos);
+        line.SetPosition(1, midPosition);
+        line.SetPosition(2,tarPos);
+    }
+
+    private void calculateLine(){
+        float d;
+        float v_i;
+        float v_f;
+        float a;
+        float t;
+    }
+
 }
