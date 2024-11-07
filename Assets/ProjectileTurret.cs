@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -111,10 +112,13 @@ public class ProjectileTurret : MonoBehaviour{
         midPoint = (((0 + gravity.y) + 0)/2) * 2;
 
         float x = (iPos.x + tarPos.x) /2;
-        float y = midPoint;
+        float y = midPoint/2;
         float z = (iPos.z + tarPos.z) / 2;
-        Vector3 midPosition= new Vector3(x, y, z);
+        
 
+        //float dis = Mathf.Sqrt( ((tarPos.x - iPos.x)*(tarPos.x - iPos.x) + (tarPos.z - iPos.z)*(tarPos.z - iPos.z)) );
+
+        Vector3 midPosition= new Vector3(x, y, z);
         line.SetPosition(0, iPos);
         line.SetPosition(1, midPosition);
         line.SetPosition(2,tarPos);
