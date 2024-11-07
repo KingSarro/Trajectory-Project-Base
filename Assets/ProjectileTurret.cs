@@ -91,12 +91,18 @@ public class ProjectileTurret : MonoBehaviour{
             float highAngle = v2 + root;
             float lowAngle = v2 - root;
 
-            DrawLine(); //S.S
+            //!DrawLine(); //S.S
 
-            if (useLow)
-                return (Mathf.Atan2(lowAngle, g * x) * Mathf.Rad2Deg);
-            else
-                return (Mathf.Atan2(highAngle, g * x) * Mathf.Rad2Deg);
+            if (useLow){
+                float theta = (Mathf.Atan2(lowAngle, g * x) * Mathf.Rad2Deg);
+                CalculateLine(lowAngle);
+                return theta;
+            }
+            else{
+                float theta = (Mathf.Atan2(highAngle, g * x) * Mathf.Rad2Deg);
+                CalculateLine(highAngle);
+                return theta;
+            }
         }
         else
             return null;
@@ -111,25 +117,48 @@ public class ProjectileTurret : MonoBehaviour{
         //midPoint = (float)((iPos.y * projectileSpeed/2) + (.5 * (0 + gravity.y) * (projectileSpeed/2 * projectileSpeed/2)));
         midPoint = (((0 + gravity.y) + 0)/2) * 2;
 
+        
+
         float x = (iPos.x + tarPos.x) /2;
-        float y = midPoint/2;
+        //float y = midPoint/2;
+        float y = barrelEnd.position.y + (projectileSpeed * Time.deltaTime) + (0.5f * gravity.y * (Time.deltaTime * Time.deltaTime));
         float z = (iPos.z + tarPos.z) / 2;
         
 
         //float dis = Mathf.Sqrt( ((tarPos.x - iPos.x)*(tarPos.x - iPos.x) + (tarPos.z - iPos.z)*(tarPos.z - iPos.z)) );
 
-        Vector3 midPosition= new Vector3(x, y, z);
+        Vector3 midPosition= new Vector3(x, Mathf.Abs(y), z);
         line.SetPosition(0, iPos);
         line.SetPosition(1, midPosition);
         line.SetPosition(2,tarPos);
     }
 
-    private void calculateLine(){
+    private void CalculateLine(float theta){
         float d;
         float v_i;
         float v_f;
         float a;
         float t;
-    }
+
+        //Find y
+        //!float y = barrelEnd.position.y + (projectileSpeed * Time.deltaTime) + (0.5f * -gravity.y * (Time.deltaTime * Time.deltaTime));
+        float V_oy = projectileSpeed * Mathf.Sin(theta);
+        float V_y = V_oy - -gravity.y * Time.deltaTime;
+        float d_y = barrelEnd.position.y + (V_oy * Time.deltaTime) + (.5f * -gravity.y * (Time.deltaTime *Time.deltaTime));
+
+        //Find x
+        //Find z
+        float x = (barrelEnd.position.x + crosshair.transform.position.x) / 2;
+        float z = (barrelEnd.position.z + crosshair.transform.position.z) / 2;
+
+        Vector3 midPosition = new Vector3(x, d_y, z);
+
+        line.SetPosition(0, barrelEnd.position);
+        line.SetPosition(1, midPosition);
+        line.SetPosition(2, crosshair.transform.position);
+
+
+
+    }//End Method
 
 }
